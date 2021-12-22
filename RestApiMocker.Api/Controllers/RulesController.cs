@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RestApiMocker.Api.CQRS.Commands;
 using RestApiMocker.Api.CQRS.Queries;
-using RestApiMocker.Api.Models;
-using RestApiMocker.Data.Entities;
 
 namespace RestApiMocker.Api.Controllers
 {
@@ -13,12 +10,9 @@ namespace RestApiMocker.Api.Controllers
     public class RulesController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
-        public RulesController(IMediator mediator, IMapper mapper)
+        public RulesController(IMediator mediator)
         {
             _mediator = mediator;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -29,20 +23,38 @@ namespace RestApiMocker.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AppRule>>> GetRule()
+        public async Task<IActionResult> GetAllRules()
         {
-            return await _mediator.Send(new GetAllRulesQuery()); 
- 
+            return Ok(await _mediator.Send(new GetAllRulesQuery()) );
+
         }
-        
-        // TODO: Commit to new branch
-        
-        // [HttpPut]
-        // EditRule
 
-        // Delete
+        //[HttpGet]
+        //public async Task<ActionResult<List<AppRule>>> GetRule()
+        //{
+        //    return await _mediator.Send(new GetAllRulesQuery());
 
-        // [HttpGet]
-        // List()
+        //}
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetARuleById(int id)
+        {
+            return Ok(await _mediator.Send(new GetARuleByIdQuery { Id = id }));
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateRuleById(int id, UpdateRuleCommand command)
+        {
+            command.Id = id;
+            return Ok(await _mediator.Send(command)); 
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRuleById(int id)
+        {
+            return Ok(await _mediator.Send(new DeleteRuleCommand{ Id = id }));
+        }
     }
 }

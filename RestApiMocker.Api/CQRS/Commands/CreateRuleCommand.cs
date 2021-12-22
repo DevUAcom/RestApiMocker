@@ -26,12 +26,11 @@ namespace RestApiMocker.Api.CQRS.Commands
             _mapper = mapper;
         }
 
-        public async Task<int> Handle(CreateRuleCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateRuleCommand command, CancellationToken cancellationToken)
         {
 
-            var rule = _mapper.Map<AppRule>(request);
+            var rule = _mapper.Map<AppRule>(command);
 
-            //TODO: replace with AUTOMAPPER
             //AppRule rule = new AppRule()
             //{
             //    Method = request.Method,
