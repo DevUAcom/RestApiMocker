@@ -5,7 +5,7 @@ using RestApiMocker.Data.Entities;
 
 namespace RestApiMocker.Api.CQRS.Commands
 {
-    public class CreateRuleCommand : IRequest<int> 
+    public class CreateRuleCommand : IRequest<int>
     {
         public string Method { get; set; }
         public string Path { get; set; }
@@ -13,40 +13,41 @@ namespace RestApiMocker.Api.CQRS.Commands
         public string ResponseHeaders { get; set; }
         public string ResponseBody { get; set; }
 
-    }
 
-    public class CreateRuleCommandHandler : IRequestHandler<CreateRuleCommand, int>
-    {
-        private readonly MockerContext _dbContext;
-        private readonly IMapper _mapper;
 
-        public CreateRuleCommandHandler(MockerContext dbContext, IMapper mapper)
+        public class CreateRuleCommandHandler : IRequestHandler<CreateRuleCommand, int>
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
+            private readonly MockerContext _dbContext;
+            private readonly IMapper _mapper;
 
-        public async Task<int> Handle(CreateRuleCommand command, CancellationToken cancellationToken)
-        {
+            public CreateRuleCommandHandler(MockerContext dbContext, IMapper mapper)
+            {
+                _dbContext = dbContext;
+                _mapper = mapper;
+            }
 
-            var rule = _mapper.Map<AppRule>(command);
+            public async Task<int> Handle(CreateRuleCommand command, CancellationToken cancellationToken)
+            {
 
-            //AppRule rule = new AppRule()
-            //{
-            //    Method = request.Method,
-            //    Path = request.Path,
-            //    ResponseBody = request.ResponseBody,
-            //    ResponseHeaders = request.ResponseHeaders,
-            //    ResponseStatus = request.ResponseStatus,
-            //};
+                var rule = _mapper.Map<AppRule>(command);
 
-            _dbContext.AppRule.Add(rule);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+                //AppRule rule = new AppRule()
+                //{
+                //    Method = request.Method,
+                //    Path = request.Path,
+                //    ResponseBody = request.ResponseBody,
+                //    ResponseHeaders = request.ResponseHeaders,
+                //    ResponseStatus = request.ResponseStatus,
+                //};
 
-            // client wants to know identity id
-            // you can return the whole object if needed . could be useful for some clients.
-            // in most cases returning the id is enough
-            return rule.Id;
+                _dbContext.AppRule.Add(rule);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+
+                // client wants to know identity id
+                // you can return the whole object if needed . could be useful for some clients.
+                // in most cases returning the id is enough
+                return rule.Id;
+            }
         }
     }
 
