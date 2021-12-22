@@ -1,6 +1,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using RestApiMocker.Api.CQRS.Queries;
 using RestApiMocker.Data;
+using RestApiMocker.Data.Entities;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json");
@@ -12,7 +15,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MockerContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MockerContext")));
-builder.Services.AddMediatR(typeof(Program));
+builder.Services.AddMediatR(typeof(GetAllRulesQuery).Assembly); // add this if class lib used.
+//builder.Services.AddMediatR(typeof(Program)); // add this if class lib used.
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

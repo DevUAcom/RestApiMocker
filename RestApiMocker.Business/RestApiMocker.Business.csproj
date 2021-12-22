@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RestApiMocker.Api\RestApiMocker.Api.csproj" />
     <ProjectReference Include="..\RestApiMocker.Data\RestApiMocker.Data.csproj" />
   </ItemGroup>
 

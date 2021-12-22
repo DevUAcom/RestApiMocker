@@ -14,7 +14,7 @@ namespace RestApiMocker.Data
         {
         }
 
-        public DbSet<Rule> Rules { get; set; }
+        public DbSet<AppRule> AppRule { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,10 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RestApiMocker.Api.CQRS.Commands;
+using RestApiMocker.Api.CQRS.Queries;
 using RestApiMocker.Api.Models;
+using RestApiMocker.Data.Entities;
 
 namespace RestApiMocker.Api.Controllers
 {
@@ -9,25 +13,30 @@ namespace RestApiMocker.Api.Controllers
     public class RulesController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public RulesController(IMediator mediator)
+        public RulesController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<ActionResult<RuleResponse>> AddRule(RuleRequest ruleRequest)
+        public async Task<IActionResult> AddRule(CreateRuleCommand command)
         {
-            var response = await _mediator.Send(ruleRequest);
-            return Created($"rules/{response.Id}", response);
+            var response = await _mediator.Send(command);
+            return Created($"rules/{response}", response);
         }
 
         [HttpGet]
-        public IActionResult GetRule()
+        public async Task<ActionResult<List<AppRule>>> GetRule()
         {
-            return Ok(null);
+            return await _mediator.Send(new GetAllRulesQuery()); 
+ 
         }
-
+        
+        // TODO: Commit to new branch
+        
         // [HttpPut]
         // EditRule
 
