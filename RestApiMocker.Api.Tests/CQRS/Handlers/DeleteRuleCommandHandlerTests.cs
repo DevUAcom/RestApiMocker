@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using RestApiMocker.Api.CQRS.Commands;
+using RestApiMocker.Api.Exceptions;
 using RestApiMocker.Data;
 using RestApiMocker.Data.Entities;
 using Xunit;
@@ -28,7 +30,7 @@ namespace RestApiMocker.Api.Tests.CQRS.Handlers
         public async Task Should_Delete_Existing_Entity()
         {
             // Arrange
-            int ruleId = 0;
+            int ruleId;
             await using (var context = new MockerContext(_options))
             {
                 AppRule rule = _fixture.Create<AppRule>();
@@ -46,23 +48,25 @@ namespace RestApiMocker.Api.Tests.CQRS.Handlers
             }
 
             // Assert
+            await using (var context = new MockerContext(_options))
+            {
+                var rule = await context.AppRule.FirstOrDefaultAsync(x => x.Id == ruleId);
+                rule.Should().BeNull();
+            }
         }
 
         [Fact]
-        public async Task Should_Ignore_Not_Existing_Entity()
+        public async Task Should_Throw_NotFoundException_When_Entity_Does_Not_Exist()
         {
             // Arrange
             int ruleId = 1;
             Fixture fixture = new Fixture();
 
-            // Act
-            await using (var context = new MockerContext(_options))
-            {
-                var deleteRuleCommandHandler = new DeleteRuleCommand.DeleteRuleCommandHandler(context);
-                var result = await deleteRuleCommandHandler.Handle(new DeleteRuleCommand { Id = ruleId }, CancellationToken.None);
-            }
-
-            // Assert
+            // Act, Assert
+            await using var context = new MockerContext(_options);
+            var deleteRuleCommandHandler = new DeleteRuleCommand.DeleteRuleCommandHandler(context);
+            Func<Task> act = () => deleteRuleCommandHandler.Handle(new DeleteRuleCommand { Id = ruleId }, CancellationToken.None);
+            await act.Should().ThrowAsync<NotFoundException>();
         }
     }
 }
