@@ -52,7 +52,7 @@ namespace RestApiMocker.Api.Tests.CQRS.Handlers
         public async Task Should_Ignore_Not_Existing_Entity()
         {
             // Arrange
-            int ruleId = 0;
+            int ruleId = 1;
             Fixture fixture = new Fixture();
 
             // Act

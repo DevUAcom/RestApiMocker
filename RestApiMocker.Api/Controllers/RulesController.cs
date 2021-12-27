@@ -54,6 +54,7 @@ namespace RestApiMocker.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRuleById(int id)
         {
+         
             return Ok(await _mediator.Send(new DeleteRuleCommand{ Id = id }));
         }
     }

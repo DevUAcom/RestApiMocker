@@ -24,9 +24,15 @@ namespace RestApiMocker.Api.CQRS.Commands
             public async Task<int> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
             {
                 var rule =  await _context.AppRule.FirstOrDefaultAsync(r => r.Id == command.Id);
-                _context.AppRule.Remove(rule);
-                await _context.SaveChangesAsync(cancellationToken);
-                return rule.Id;
+                
+                if (rule != null)
+                {
+                    _context.AppRule.Remove(rule);
+                    await _context.SaveChangesAsync(cancellationToken);
+                    return rule.Id;
+                }
+
+                throw new ArgumentException("Id does not exist");
             }
         }
     }
