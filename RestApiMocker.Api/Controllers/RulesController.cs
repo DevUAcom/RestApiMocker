@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RestApiMocker.Api.CQRS.Commands;
 using RestApiMocker.Api.CQRS.Queries;
+using RestApiMocker.Api.HandlerResults;
 
 namespace RestApiMocker.Api.Controllers
 {
@@ -54,8 +55,14 @@ namespace RestApiMocker.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRuleById(int id)
         {
-         
-            return Ok(await _mediator.Send(new DeleteRuleCommand{ Id = id }));
+            var result = await _mediator.Send(new DeleteRuleCommand { Id = id });
+            return result switch
+            {
+                OkHandlerResult => Ok(),
+                NotFoundHandlerResult => NotFound(),
+                _ => throw new NotImplementedException(),
+            };
+
         }
     }
 }

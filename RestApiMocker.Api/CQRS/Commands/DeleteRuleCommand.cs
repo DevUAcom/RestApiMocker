@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestApiMocker.Api.HandlerResults;
 
 namespace RestApiMocker.Api.CQRS.Commands
 {
-    public class DeleteRuleCommand : IRequest<int>
+    public class DeleteRuleCommand : IRequest<HandlerResult>
     {
         public int Id { get; set; }
 
-        public class DeleteRuleCommandHandler : IRequestHandler<DeleteRuleCommand, int>
+        public class DeleteRuleCommandHandler : IRequestHandler<DeleteRuleCommand, HandlerResult>
         {
             private readonly MockerContext _context;
             public DeleteRuleCommandHandler(MockerContext mockerContext)
@@ -21,18 +22,18 @@ namespace RestApiMocker.Api.CQRS.Commands
                 _context = mockerContext;
             }
 
-            public async Task<int> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
+            public async Task<HandlerResult> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
             {
                 var rule =  await _context.AppRule.FirstOrDefaultAsync(r => r.Id == command.Id);
-                
-                if (rule != null)
-                {
-                    _context.AppRule.Remove(rule);
-                    await _context.SaveChangesAsync(cancellationToken);
-                    return rule.Id;
-                }
 
-                throw new ArgumentException("Id does not exist");
+                if (rule == null)
+                {
+                    return new NotFoundHandlerResult();
+                }
+                
+                _context.AppRule.Remove(rule);
+                await _context.SaveChangesAsync(cancellationToken);
+                return new OkHandlerResult();
             }
         }
     }

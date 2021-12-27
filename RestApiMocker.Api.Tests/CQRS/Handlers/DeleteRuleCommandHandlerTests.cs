@@ -46,6 +46,11 @@ namespace RestApiMocker.Api.Tests.CQRS.Handlers
             }
 
             // Assert
+            await using (var context = new MockerContext(_options))
+            {
+                var rule = await context.AppRule.FirstOrDefaultAsync(x => x.Id == ruleId);
+                rule.Should().BeNull();
+            }
         }
 
         [Fact]
