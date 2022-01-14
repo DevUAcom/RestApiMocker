@@ -1,12 +1,8 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using RestApiMocker.Api.Exceptions;
 using RestApiMocker.Data;
 using RestApiMocker.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestApiMocker.Api.CQRS.Queries
 {
@@ -24,7 +20,16 @@ namespace RestApiMocker.Api.CQRS.Queries
 
             public async Task<AppRule> Handle(GetARuleByIdQuery query, CancellationToken cancellationToken)
             {
-                return await _context.AppRule.FirstOrDefaultAsync(r => r.Id == query.Id);
+                var appRule = await _context.AppRule.FirstOrDefaultAsync(r => r.Id == query.Id);
+
+                if (appRule == null)
+                {
+                    throw new NotFoundException();
+                }
+                else
+                {
+                    return appRule;
+                }
             }
         }
     }
