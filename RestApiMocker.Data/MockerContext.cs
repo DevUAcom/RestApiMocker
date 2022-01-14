@@ -19,6 +19,9 @@ namespace RestApiMocker.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RuleEntityTypeConfiguration());
+
+            //https://docs.microsoft.com/en-us/ef/core/modeling/keyless-entity-types?tabs=fluent-api
+            modelBuilder.Entity<AppRule>().HasNoKey();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace RestApiMocker.Api.CQRS.Queries
                 _mockerContext = mockerContext;
             }
 
+ 
             public Task<List<AppRule>> Handle(GetAllRulesQuery request, CancellationToken cancellationToken)
             {
                 //return await _mockerContext.AppRule
