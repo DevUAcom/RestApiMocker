@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestApiMocker.Data;
 
@@ -11,9 +12,10 @@ using RestApiMocker.Data;
 namespace RestApiMocker.Data.Migrations
 {
     [DbContext(typeof(MockerContext))]
-    partial class MockerContextModelSnapshot : ModelSnapshot
+    [Migration("20220116153013_ResponseHeaderRelationship2")]
+    partial class ResponseHeaderRelationship2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -4,7 +4,7 @@ using RestApiMocker.Data.EntityTypeConfigurations;
 
 namespace RestApiMocker.Api.Models
 {
-    public class RuleRequest : IRequest<RuleResponse>
+    public class RuleRequest 
     {
         [MaxLength(RuleEntityTypeConfiguration.MethodColumnMaxLength)]
         public string Method { get; set; }
