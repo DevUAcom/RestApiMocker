@@ -10,7 +10,7 @@ namespace RestApiMocker.Api.CQRS.Commands
         public string Method { get; set; }
         public string Path { get; set; }
         public int ResponseStatus { get; set; }
-        public string ResponseHeaders { get; set; }
+        public ICollection<ResponseHeader> ResponseHeaders { get; set; }
         public string ResponseBody { get; set; }
 
 

@@ -56,7 +56,14 @@ namespace RestApiMocker.Api.Controllers
         public async Task<IActionResult> UpdateRuleById(int id, UpdateRuleCommand command)
         {
             command.Id = id;
-            return Ok(await _mediator.Send(command));
+            try
+            {
+                return Ok(await _mediator.Send(command));
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
         }
 
         [HttpDelete("{id}")]

@@ -22,14 +22,7 @@ namespace RestApiMocker.Api.CQRS.Queries
             {
                 var appRule = await _context.AppRule.FirstOrDefaultAsync(r => r.Id == query.Id);
 
-                if (appRule == null)
-                {
-                    throw new NotFoundException();
-                }
-                else
-                {
-                    return appRule;
-                }
+                return appRule ?? throw new NotFoundException();                
             }
         }
     }

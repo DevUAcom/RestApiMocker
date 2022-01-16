@@ -32,8 +32,8 @@ namespace RestApiMocker.Api.CQRS.Commands
                 }
                 
                 _context.AppRule.Remove(rule);
-                await _context.SaveChangesAsync(cancellationToken);
-                return rule.Id;
+                return await _context.SaveChangesAsync(cancellationToken);
+                //return rule.Id;
             }
         }
     }

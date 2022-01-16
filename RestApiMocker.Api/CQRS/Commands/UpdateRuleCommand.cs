@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using RestApiMocker.Api.Exceptions;
 using RestApiMocker.Data;
 using RestApiMocker.Data.Entities;
 using System;
@@ -16,7 +17,7 @@ namespace RestApiMocker.Api.CQRS.Commands
         public string Method { get; set; }
         public string Path { get; set; }
         public int ResponseStatus { get; set; }
-        public IList<ResponseHeader> ResponseHeaders { get; set; }
+        public ICollection<ResponseHeader> ResponseHeaders { get; set; }
         public string ResponseBody { get; set; }
 
 
@@ -33,8 +34,13 @@ namespace RestApiMocker.Api.CQRS.Commands
 
             public async Task<int> Handle(UpdateRuleCommand command, CancellationToken cancellationToken)
             {
-                var rule = _context.AppRule.FirstOrDefault(r => r.Id == command.Id); 
-                
+                var rule = _context.AppRule.FirstOrDefault(r => r.Id == command.Id);
+
+                if (rule == null)
+                {
+                    throw new NotFoundException();
+                }
+
                 //var rule = _mapper.Map<AppRule>(updatedCommand);
                 rule.Method = command.Method;
                 rule.Path = command.Path;

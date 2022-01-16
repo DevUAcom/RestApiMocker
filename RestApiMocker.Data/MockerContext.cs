@@ -15,13 +15,14 @@ namespace RestApiMocker.Data
         }
 
         public DbSet<AppRule> AppRule { get; set; }
+        public DbSet<ResponseHeader> ResponseHeaders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RuleEntityTypeConfiguration());
 
             //https://docs.microsoft.com/en-us/ef/core/modeling/keyless-entity-types?tabs=fluent-api
-            modelBuilder.Entity<AppRule>().HasNoKey();
+            //modelBuilder.Entity<ResponseHeader>().HasNoKey();
         }
     }
 }
