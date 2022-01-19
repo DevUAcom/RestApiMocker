@@ -10,6 +10,6 @@ namespace RestApiMocker.Data.Entities
         public int ResponseStatus { get; set; }     
         public string ResponseBody { get; set; }
         public ICollection<ResponseHeader> ResponseHeaders { get; set; }
-        
+
     }
 }

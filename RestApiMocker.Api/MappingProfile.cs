@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static RestApiMocker.Api.CQRS.Commands.CreateRuleCommand;
 
 namespace RestApiMocker.Api
 {
@@ -15,6 +16,7 @@ namespace RestApiMocker.Api
         public MappingProfile()
         {
             CreateMap<CreateRuleCommand, AppRule>();
+            CreateMap<ResponseHeaderDto, ResponseHeader>();
         }
     }
 }

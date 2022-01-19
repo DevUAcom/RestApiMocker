@@ -20,11 +20,11 @@ namespace RestApiMocker.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new RuleEntityTypeConfiguration());
-            modelBuilder.Entity<AppRule>()
-                .HasMany(r => r.ResponseHeaders)
-                .WithOne(i => i.AppRule)
-                .HasForeignKey(p => p.AppRuleId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<AppRule>()
+            //    .HasMany(r => r.ResponseHeaders)
+            //    .WithOne(i => i.AppRule)
+            //    .HasForeignKey(p => p.AppRuleId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
         }
     }
