@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace RestApiMocker.Api.CQRS.Commands
 {
-    public class UpdateRuleCommand : IRequest<int>
+    public class UpdateRuleCommand : IRequest<int?>
     {
         public int Id { get; set; }
         public string Method { get; set; }
@@ -21,7 +21,7 @@ namespace RestApiMocker.Api.CQRS.Commands
         public string ResponseBody { get; set; }
 
 
-        public class UpdateRuleCommandHandler : IRequestHandler<UpdateRuleCommand, int>
+        public class UpdateRuleCommandHandler : IRequestHandler<UpdateRuleCommand, int?>
         {
             private readonly MockerContext _context;
             private readonly IMapper _mapper;
@@ -32,13 +32,14 @@ namespace RestApiMocker.Api.CQRS.Commands
                 _mapper = mapper;
             }
 
-            public async Task<int> Handle(UpdateRuleCommand command, CancellationToken cancellationToken)
+            public async Task<int?> Handle(UpdateRuleCommand command, CancellationToken cancellationToken)
             {
                 var rule = _context.AppRule.FirstOrDefault(r => r.Id == command.Id);
 
                 if (rule == null)
                 {
-                    throw new NotFoundException();
+                    //throw new NotFoundException();
+                    return null;
                 }
 
                 //var rule = _mapper.Map<AppRule>(updatedCommand);

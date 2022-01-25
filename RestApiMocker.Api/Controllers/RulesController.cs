@@ -41,14 +41,20 @@ namespace RestApiMocker.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetARuleById(int id)
         {
-            try
-            {
-                return Ok(await _mediator.Send(new GetARuleByIdQuery { Id = id }));
-            }
-            catch (NotFoundException)
+            //try
+            //{
+            //    return Ok(await _mediator.Send(new GetARuleByIdQuery { Id = id }));
+            //}
+            //catch (NotFoundException)
+            //{
+            //    return NotFound();
+            //}
+            var rule = await _mediator.Send(new GetARuleByIdQuery { Id = id });
+            if (rule == null)
             {
                 return NotFound();
             }
+            return Ok(rule);
         }
 
 
@@ -71,12 +77,18 @@ namespace RestApiMocker.Api.Controllers
         {
             try
             {
-                return Ok(await _mediator.Send(new DeleteRuleCommand { Id = id }));
+                var numberOfDeletedRecord = await _mediator.Send(new DeleteRuleCommand { Id = id });
+                if (numberOfDeletedRecord == 0)
+                {
+                    return NotFound();
+                }
+                return Ok();
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
         }
+
     }
 }

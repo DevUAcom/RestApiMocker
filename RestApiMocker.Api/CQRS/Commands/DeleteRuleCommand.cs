@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RestApiMocker.Api.Exceptions;
+using RestApiMocker.Data.Entities;
 
 namespace RestApiMocker.Api.CQRS.Commands
 {
@@ -25,15 +26,19 @@ namespace RestApiMocker.Api.CQRS.Commands
             public async Task<int> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
             {
                 var rule =  await _context.AppRule.FirstOrDefaultAsync(r => r.Id == command.Id);
+                // select * from Rule where Id = command.Id
+                //var rule = new AppRule() { Id = command.Id };
 
                 if (rule == null)
                 {
-                    throw new NotFoundException();
+                    return 0;
                 }
-                
+
+                //_context.Attach(rule);
                 _context.AppRule.Remove(rule);
                 return await _context.SaveChangesAsync(cancellationToken);
-                //return rule.Id;
+                // delete from Rule where Id = command.Id
+                //return Unit.Value;
             }
         }
     }

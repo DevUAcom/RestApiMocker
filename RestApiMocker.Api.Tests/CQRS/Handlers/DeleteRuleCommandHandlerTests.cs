@@ -33,7 +33,11 @@ namespace RestApiMocker.Api.Tests.CQRS.Handlers
             int ruleId;
             await using (var context = new MockerContext(_options))
             {
-                AppRule rule = _fixture.Create<AppRule>();
+                AppRule rule = _fixture
+                    .Build<AppRule>()
+                    .Without(x => x.ResponseHeaders)
+                    .Create()
+                    ;
                 context.AppRule.Add(rule);
                 await context.SaveChangesAsync();
                 ruleId = rule.Id;
