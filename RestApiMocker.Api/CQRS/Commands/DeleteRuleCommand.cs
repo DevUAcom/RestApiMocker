@@ -10,11 +10,11 @@ using RestApiMocker.Api.Exceptions;
 
 namespace RestApiMocker.Api.CQRS.Commands
 {
-    public class DeleteRuleCommand : IRequest<int>
+    public class DeleteRuleCommand : IRequest<Unit>
     {
         public int Id { get; set; }
 
-        public class DeleteRuleCommandHandler : IRequestHandler<DeleteRuleCommand, int>
+        public class DeleteRuleCommandHandler : IRequestHandler<DeleteRuleCommand, Unit>
         {
             private readonly MockerContext _context;
             public DeleteRuleCommandHandler(MockerContext mockerContext)
@@ -22,7 +22,7 @@ namespace RestApiMocker.Api.CQRS.Commands
                 _context = mockerContext;
             }
 
-            public async Task<int> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(DeleteRuleCommand command, CancellationToken cancellationToken)
             {
                 var rule =  await _context.AppRule.FirstOrDefaultAsync(r => r.Id == command.Id);
 
@@ -32,8 +32,9 @@ namespace RestApiMocker.Api.CQRS.Commands
                 }
                 
                 _context.AppRule.Remove(rule);
-                return await _context.SaveChangesAsync(cancellationToken);
+                 await _context.SaveChangesAsync(cancellationToken);
                 //return rule.Id;
+                return Unit.Value;
             }
         }
     }

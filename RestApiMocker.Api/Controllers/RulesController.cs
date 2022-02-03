@@ -30,11 +30,13 @@ namespace RestApiMocker.Api.Controllers
 
         }
 
+
+
+
         //[HttpGet]
         //public async Task<ActionResult<List<AppRule>>> GetRule()
         //{
         //    return await _mediator.Send(new GetAllRulesQuery());
-
         //}
 
 
@@ -70,8 +72,9 @@ namespace RestApiMocker.Api.Controllers
         public async Task<IActionResult> DeleteRuleById(int id)
         {
             try
-            {
-                return Ok(await _mediator.Send(new DeleteRuleCommand { Id = id }));
+            {   
+                await _mediator.Send(new DeleteRuleCommand { Id = id });
+                return Ok();
             }
             catch (NotFoundException)
             {
